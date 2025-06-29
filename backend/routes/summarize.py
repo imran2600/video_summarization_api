@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, UploadFile
 from backend.utils.file_utils import save_uploaded_file
 from backend.services.extractor import extract_features
@@ -17,4 +18,3 @@ def summarize_video(video: UploadFile):
     output_path = f"{OUTPUT_DIR}/summary_{video.filename}"
     save_summary_video(video_path, selected, output_path)
     return {"summary_video_path": output_path}
-
