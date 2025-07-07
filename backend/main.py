@@ -20,7 +20,8 @@ app.include_router(summarize1.router)
 # CORS (optional if front-end hosted separately)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173"],  # Explicit frontend URL
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

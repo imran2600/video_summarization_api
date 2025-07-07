@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { summarizeVideo, downloadVideo } from './api';
 import FileUpload from './components/FileUpload';
