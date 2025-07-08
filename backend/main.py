@@ -3,29 +3,29 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.routes import summarize1
 from fastapi.staticfiles import StaticFiles
 import os
+
 app = FastAPI()
 
-# Get the absolute path to the backend directory
-backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-static_dir = os.path.join(backend_dir, "backend", "static")
-
-# Create directories if they don't exist
+# Improved static files configuration
+static_dir = os.path.join(os.path.dirname(__file__), "static")
 os.makedirs(os.path.join(static_dir, "uploads"), exist_ok=True)
 os.makedirs(os.path.join(static_dir, "outputs"), exist_ok=True)
 
-app.mount("/static", StaticFiles(directory="backend/static"), name="static")
-
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+@app.get("/generate-summary")
+async def generate_summary():
+    return {
+        "status": "success",
+        "download_url": "http://localhost:8000/static/outputs/summary_l1.mp4",
+        "filename": "summary_l1.mp4"
+    }
 app.include_router(summarize1.router)
 
-# CORS (optional if front-end hosted separately)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Explicit frontend URL
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-@app.get("/")
-async def root():
-    return {"message": "Video Summarization API is running"}
 

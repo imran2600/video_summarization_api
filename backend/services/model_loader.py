@@ -69,20 +69,21 @@ from pathlib import Path
 from layers.summarizer3 import PGL_SUM
 from backend.config import DEVICE
 
-# Absolute path to model weights (use raw string for Windows paths)
-MODEL_PATH = r"D:\video_summarization_api-main\video_summarization_api-main\backend\Model\epoch-199.pkl"
-
-def load_model():
-    """Load trained PGL-SUM model with weights"""
+def load_model(weights_path=r"D:\video_summarization_api-main\video_summarization_api-main\backend\Model\epoch-199.pkl"):
+    """
+    Load PGL-SUM model with weights
+    Args:
+        weights_path: Path to model weights (defaults to project location)
+    """
     try:
-        # 1. Verify model file exists
-        if not Path(MODEL_PATH).exists():
-            raise FileNotFoundError(
-                f"Model weights not found at:\n{MODEL_PATH}\n"
-                f"Current directory: {Path.cwd()}"
-            )
+        # Convert to absolute path
+        model_path = Path(weights_path).absolute()
         
-        # 2. Initialize model architecture
+        # Verify file exists
+        if not model_path.exists():
+            raise FileNotFoundError(f"Model weights not found at: {model_path}")
+
+        # Initialize model
         model = PGL_SUM(
             input_size=1024,
             output_size=1024,
@@ -90,19 +91,13 @@ def load_model():
             heads=8,
             fusion="add"
         ).to(DEVICE)
-        
-        # 3. Load weights
-        state_dict = torch.load(MODEL_PATH, map_location=DEVICE)
+
+        # Load weights
+        state_dict = torch.load(model_path, map_location=DEVICE)
         model.load_state_dict(state_dict)
         model.eval()
         
         return model
-        
+
     except Exception as e:
-        error_msg = f"""
-        🚨 CRITICAL MODEL LOAD ERROR 🚨
-        Path: {MODEL_PATH}
-        Error Type: {type(e).__name__}
-        Details: {str(e)}
-        """
-        raise RuntimeError(error_msg) from e
+        raise RuntimeError(f"Model loading failed: {str(e)}")

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from 'react';
 import { summarizeVideo, downloadVideo } from './api';
 import FileUpload from './components/FileUpload';
@@ -40,20 +39,20 @@ function App() {
     }
   };
 
-  return (
-    <div className="app">
-      <h1>Video Summarization</h1>
-      <p>Upload a video to get a summarized version</p>
+  // return (
+  //   <div className="app">
+  //     <h1>Video Summarization</h1>
+  //     <p>Upload a video to get a summarized version</p>
       
-      <FileUpload onFileSelect={handleFileSelect} isLoading={isLoading} />
+  //     <FileUpload onFileSelect={handleFileSelect} isLoading={isLoading} />
       
-      {isLoading && <ProgressBar progress={progress} />}
+  //     {isLoading && <ProgressBar progress={progress} />}
       
-      {error && <div className="error">{error}</div>}
+  //     {error && <div className="error">{error}</div>}
       
-      <ResultSection result={result} onDownload={downloadVideo} />
-    </div>
-  );
+  //     <ResultSection result={result} onDownload={downloadVideo} />
+  //   </div>
+  // );
 }
 
 export default App;
